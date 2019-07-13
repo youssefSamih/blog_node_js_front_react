@@ -3,6 +3,7 @@ import { isAuthenticated } from '../auth'
 import { Redirect, Link } from 'react-router-dom'
 import DefautProfile from '../images/avatar.gif'
 import { read } from './apiUser'
+import DeleteUser from './DeleteUser';
 
 class Profile extends Component {
     constructor() {
@@ -31,6 +32,11 @@ class Profile extends Component {
         this.init(userId)
     }
 
+    componentWillReceiveProps(props) {
+        const userId = props.match.params.userId
+        this.init(userId)
+    }
+
     render() {
         const {redirectToSignin, user} = this.state
         if (redirectToSignin) return <Redirect to="/signin" />
@@ -47,14 +53,12 @@ class Profile extends Component {
                                 <p>email {user.email}</p>
                                 <p>{`Joined ${new Date(user.created).toDateString()}`}</p>
                             </div>
-                        {isAuthenticated().user && isAuthenticated().user._id == user._id && (
+                        {isAuthenticated().user && isAuthenticated().user._id === user._id && (
                             <div className="d-inline-block">
                                 <Link className="btn btn-raised btn-success mr-5" to={`/user/edit/${user._id}`}>
                                     Edit Profile
                                 </Link>
-                                <button className="btn btn-raised btn-danger">
-                                    Delete Profile
-                                </button>
+                                <DeleteUser userId={user._id} />
                             </div>
                         )}
                     </div>
