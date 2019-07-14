@@ -14,7 +14,7 @@ class DeleteUser extends Component {
         remove(userId, token).then(data => {
             if(data.err) {
                 console.log(data.err)
-            } {
+            } else {
                 signout(() => console.log("User is deleted"))
                 this.setState({ redirect: true })
             }
