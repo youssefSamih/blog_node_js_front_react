@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { read, update } from './apiUser'
 import { isAuthenticated } from '../auth';
 import { Redirect } from 'react-router-dom'
+import DefautProfile from '../images/avatar.gif'
 
 class EditProfile extends Component {
     constructor(){
@@ -107,6 +108,7 @@ class EditProfile extends Component {
         if(redirectToProfile) {
             return <Redirect to={`/user/${id}`}/>
         }
+        const photoUrl = id ? `http://localhost:8080/user/photo/${id}?${new Date().getTime()}` : DefautProfile
         
         return (
             <div className="container">
@@ -116,6 +118,7 @@ class EditProfile extends Component {
 
                 {loading ? <div className="jumbotron text-center"><h2>Loading...</h2></div> : ""}
                 
+                <img style={{height: '200px', width: "auto"}} src={photoUrl} onError={i => (i.target.src = `${DefautProfile}`)} alt={name} className="img-thumbnail" />
                 {this.signupForm(name, email, password)}
             </div>
         )
