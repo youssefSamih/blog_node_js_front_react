@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { read, update } from './apiUser'
+import { read, update, updateUser } from './apiUser'
 import { isAuthenticated } from '../auth';
 import { Redirect } from 'react-router-dom'
 import DefautProfile from '../images/avatar.gif'
@@ -15,7 +15,8 @@ class EditProfile extends Component {
             redirectToProfile: false,
             error: '',
             fileSize: 0,
-            loading: false
+            loading: false,
+            about: ""
         }
     }
     init = userId => {
@@ -25,7 +26,7 @@ class EditProfile extends Component {
             if(data.error) {
                 this.setState({ redirectToSignin: true })
             }else{
-                this.setState({id: data._id, name: data.name, email: data.email})
+                this.setState({id: data._id, name: data.name, email: data.email, error: "", about: data.about})
             }
         })
         .catch(err => console.log(err))
@@ -40,19 +41,19 @@ class EditProfile extends Component {
     isValid = () => {
         const { name, email, password, fileSize } = this.state
         if(fileSize > 100000) {
-            this.setState({ error: 'File size should be less than 100kb' })
+            this.setState({ error: 'File size should be less than 100kb', loading: false })
             return false
         }
         if(name.length === 0) {
-            this.setState({ error: 'Name is required' })
+            this.setState({ error: 'Name is required', loading: false })
             return false
         }
         if(!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/.test(email)) {
-            this.setState({ error: 'A valid email is required' })
+            this.setState({ error: 'A valid email is required', loading: false })
             return false
         }
         if(password.length >= 1 && password.length <=5) {
-            this.setState({ error: 'Password must be at least 6 characters long' })
+            this.setState({ error: 'Password must be at least 6 characters long', loading: false })
             return false
         }
         return true
@@ -74,14 +75,17 @@ class EditProfile extends Component {
             const token = isAuthenticated().token
             update(userId, token, this.userData).then(data => {
                 if (data.error) this.setState({error: data.error})
-                    else this.setState({
-                        redirectToProfile: true
-                    })
+                    else 
+                        updateUser(data, () => {
+                            this.setState({
+                                redirectToProfile: true
+                            })
+                        })
             })
         }
     }
 
-    signupForm = (name, email, password) => {
+    signupForm = (name, email, about, password) => {
         return <form>
                     <div className="form-group">
                         <label className="text-muted">Profile Photo</label>
@@ -96,6 +100,10 @@ class EditProfile extends Component {
                         <input type="email" onChange={this.handleChange("email")} value={email} className="form-control" />
                     </div>
                     <div className="form-group">
+                        <label className="text-muted">About</label>
+                        <textarea type="text" onChange={this.handleChange("about")} value={about} className="form-control" />
+                    </div>
+                    <div className="form-group">
                         <label className="text-muted">Password</label>
                         <input type="password" onChange={this.handleChange("password")} value={password} className="form-control" />
                     </div>
@@ -104,7 +112,7 @@ class EditProfile extends Component {
     }
 
     render() {
-        const {id, name, email, password, redirectToProfile, error, loading} = this.state
+        const {id, name, email, password, about, redirectToProfile, error, loading} = this.state
         if(redirectToProfile) {
             return <Redirect to={`/user/${id}`}/>
         }
@@ -119,7 +127,7 @@ class EditProfile extends Component {
                 {loading ? <div className="jumbotron text-center"><h2>Loading...</h2></div> : ""}
                 
                 <img style={{height: '200px', width: "auto"}} src={photoUrl} onError={i => (i.target.src = `${DefautProfile}`)} alt={name} className="img-thumbnail" />
-                {this.signupForm(name, email, password)}
+                {this.signupForm(name, email, about, password)}
             </div>
         )
     }
