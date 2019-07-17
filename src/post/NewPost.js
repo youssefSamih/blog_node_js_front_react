@@ -54,7 +54,7 @@ class NewPost extends Component {
             create(userId, token, this.postData).then(data => {
                 if (data.error) this.setState({error: data.error})
                     else {
-                        this.setState({loading: false, title: "", body: "", photo: "", redirectToProfile})
+                        this.setState({loading: false, title: "", body: "", photo: "", redirectToProfile: true})
                     }
             })
         }
@@ -79,7 +79,7 @@ class NewPost extends Component {
     }
 
     render() {
-        const {title, body, photo, user, error} = this.state
+        const {title, body, photo, user, error, redirectToProfile, loading} = this.state
         if(redirectToProfile) {
             return <Redirect to={`/user/${user._id}`}/>
         }
