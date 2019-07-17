@@ -43,6 +43,7 @@ class NewPost extends Component {
         const fileSize = name === "photo" ? event.target.files[0].size : 0
         this.postData.set(name, value)
         this.setState({[name]: value, fileSize})
+        // console.log({[name]: value, fileSize})
     }
 
     clickSubmit = event => {
@@ -51,6 +52,7 @@ class NewPost extends Component {
             this.setState({ loading: true })
             const userId = isAuthenticated().user._id
             const token = isAuthenticated().token
+            console.log(this.postData);
             create(userId, token, this.postData).then(data => {
                 if (data.error) this.setState({error: data.error})
                     else {
