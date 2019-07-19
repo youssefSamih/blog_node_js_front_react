@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { singlePost, remove } from './apiPost';
+import { singlePost, remove, unlike, like } from './apiPost';
 import DefautPost from '../images/defaultimgblog.jpg'
 import {Link, Redirect} from 'react-router-dom'
 import { isAuthenticated } from '../auth';
@@ -7,7 +7,9 @@ import { isAuthenticated } from '../auth';
 export default class SinglePost extends Component {
     state = {
         post: '',
-        redirectToHome: false
+        redirectToHome: false,
+        like: false,
+        likes: 0
     }
 
     componentDidMount = () => {
@@ -16,9 +18,15 @@ export default class SinglePost extends Component {
             if(data.error) {
                 console.log(data.error)
             } else {
-                this.setState({ post: data })
+                this.setState({ post: data, likes: data.likes.length, like: this.checkLike(data.likes) })
             }
         })
+    }
+
+    checkLike = likes => {
+        const userId = isAuthenticated().user._id
+        let match = likes.indexOf(userId) !== -1
+        return match
     }
 
     deletePost = () => {
@@ -40,12 +48,33 @@ export default class SinglePost extends Component {
         }
     }
 
-    renderPost = (post) => {
+    likeToggle = () => {
+        let callApi = this.state.like ? unlike : like
+        const userId = isAuthenticated().user._id
+        const postId = this.state.post._id
+        const token = isAuthenticated().token
+        callApi(userId, token, postId).then(data => {
+            if(data.error) {
+                console.log(data.error)
+            } else {
+                this.setState({ 
+                    like: !this.state.like,
+                    likes: data.likes.length
+                })
+            }
+        })
+    }
+
+    renderPost = post => {
         const posterId = post.postedBy ? `/user/${post.postedBy._id}` : ""
         const posterName = post.postedBy ? post.postedBy.name : "Unknow"
+        const { like, likes } = this.state
         return (
                 <div className="card-body">
                     <img style={{height: '300px', width: "100%", objectFit: "cover"}} src={`http://localhost:8080/post/photo/${post._id}`} alt={post.name} onError={i => (i.target.src = `${DefautPost}`)} className="img-thumbnail mb-3" />
+
+                    <h3 onClick={this.likeToggle}>{likes} like</h3>
+
                     <p className="card-text">{post.body}</p>
                     <br/>
                     <p className="font-italic mark">

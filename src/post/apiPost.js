@@ -74,3 +74,34 @@ export const update = (postId, token, post) => {
         return response.json()
     }).catch(err => console.log(err))
 }
+
+export const like = (userId, token, postId) => {
+    return fetch(`http://localhost:8080/post/like`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, postId})
+    })
+    .then(response => {
+        return response.json()
+    }).catch(err => console.log(err))
+    // console.log(userId, token, postId)
+}
+
+export const unlike = (userId, token, postId) => {
+    return fetch(`http://localhost:8080/post/unlike`, {
+        method: "PUT",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({userId, postId})
+    })
+    .then(response => {
+        return response.json()
+    }).catch(err => console.log(err))
+}
