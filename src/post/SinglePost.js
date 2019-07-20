@@ -8,6 +8,7 @@ export default class SinglePost extends Component {
     state = {
         post: '',
         redirectToHome: false,
+        redirectToSignin: false,
         like: false,
         likes: 0
     }
@@ -24,7 +25,7 @@ export default class SinglePost extends Component {
     }
 
     checkLike = likes => {
-        const userId = isAuthenticated().user._id
+        const userId = isAuthenticated() && isAuthenticated().user._id
         let match = likes.indexOf(userId) !== -1
         return match
     }
@@ -49,6 +50,12 @@ export default class SinglePost extends Component {
     }
 
     likeToggle = () => {
+        if(!isAuthenticated()) {
+            this.setState({
+                redirectToSignin: true
+            })
+            return false
+        }
         let callApi = this.state.like ? unlike : like
         const userId = isAuthenticated().user._id
         const postId = this.state.post._id
@@ -73,7 +80,11 @@ export default class SinglePost extends Component {
                 <div className="card-body">
                     <img style={{height: '300px', width: "100%", objectFit: "cover"}} src={`http://localhost:8080/post/photo/${post._id}`} alt={post.name} onError={i => (i.target.src = `${DefautPost}`)} className="img-thumbnail mb-3" />
 
-                    <h3 onClick={this.likeToggle}>{likes} like</h3>
+                    {like ? (
+                        <h3 onClick={this.likeToggle}><i className="fa fa-thumbs-up text-success bg-dark" style={{padding: '10px', borderRadius: "50%"}}></i> {likes} like</h3>
+                    ) : (
+                        <h3 onClick={this.likeToggle}><i className="fa fa-thumbs-up text-warning bg-dark" style={{padding: '10px', borderRadius: "50%"}}></i>  {likes} like</h3>
+                    )}
 
                     <p className="card-text">{post.body}</p>
                     <br/>
@@ -97,9 +108,11 @@ export default class SinglePost extends Component {
     }
 
     render() {
-        const {post, redirectToHome} = this.state
+        const {post, redirectToHome, redirectToSignin} = this.state
         if(redirectToHome) {
             return <Redirect to={`/`}/>
+        } else if(redirectToSignin) {
+            return <Redirect to={`/signin`}/>
         }
         return (
             <div className="container">
