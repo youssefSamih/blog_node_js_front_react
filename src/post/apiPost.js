@@ -121,7 +121,7 @@ export const comment = (userId, token, postId, comment) => {
     }).catch(err => console.log(err))
 }
 
-export const unlike = (userId, token, postId, comment) => {
+export const uncomment = (userId, token, postId, comment) => {
     return fetch(`http://localhost:8080/post/uncomment`, {
         method: "PUT",
         headers: {

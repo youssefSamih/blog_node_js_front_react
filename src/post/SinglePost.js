@@ -3,6 +3,7 @@ import { singlePost, remove, unlike, like } from './apiPost';
 import DefautPost from '../images/defaultimgblog.jpg'
 import {Link, Redirect} from 'react-router-dom'
 import { isAuthenticated } from '../auth';
+import Comment from './Comment';
 
 export default class SinglePost extends Component {
     state = {
@@ -10,7 +11,8 @@ export default class SinglePost extends Component {
         redirectToHome: false,
         redirectToSignin: false,
         like: false,
-        likes: 0
+        likes: 0,
+        comments: []
     }
 
     componentDidMount = () => {
@@ -19,7 +21,7 @@ export default class SinglePost extends Component {
             if(data.error) {
                 console.log(data.error)
             } else {
-                this.setState({ post: data, likes: data.likes.length, like: this.checkLike(data.likes) })
+                this.setState({ post: data, likes: data.likes.length, like: this.checkLike(data.likes), comments: data.comments })
             }
         })
     }
@@ -43,7 +45,7 @@ export default class SinglePost extends Component {
     }
 
     deleteConfirmed = () => {
-        let answer = window.confirm("Are you sure want to delete your account")
+        let answer = window.confirm("Are you sure want to delete your blog")
         if(answer) {
             this.deletePost()
         }
@@ -70,6 +72,10 @@ export default class SinglePost extends Component {
                 })
             }
         })
+    }
+
+    updateComments = comments => {
+        this.setState({comments})
     }
 
     renderPost = post => {
@@ -108,7 +114,7 @@ export default class SinglePost extends Component {
     }
 
     render() {
-        const {post, redirectToHome, redirectToSignin} = this.state
+        const {post, redirectToHome, redirectToSignin, comments} = this.state
         if(redirectToHome) {
             return <Redirect to={`/`}/>
         } else if(redirectToSignin) {
@@ -121,6 +127,8 @@ export default class SinglePost extends Component {
                 {!post ? (
                     <div className="jumbotron text-center"><h2>Loading...</h2></div>
                 ) : ( this.renderPost(post) )}
+
+                <Comment postId={post._id} comments={comments.reverse()} updateComments={this.updateComments} />
             </div>
         )
     }
