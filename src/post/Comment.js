@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { isAuthenticated } from '../auth';
 import {comment, uncomment} from './apiPost'
 import DefautProfile from '../images/avatar.gif'
+require('dotenv').config()
 
 export default class Comment extends Component {
     state = {
@@ -95,7 +96,7 @@ export default class Comment extends Component {
                                     <div>
                                         <Link to={`/user/${comment.postedBy._id}`}>
                                             <img src=
-                                            {`localhost:8080/user/photo.${comment.postedBy._id}`} alt={comment.postedBy.name} 
+                                            {`${process.env.REACT_APP_API_URL}/user/photo.${comment.postedBy._id}`} alt={comment.postedBy.name} 
                                             className="float-left mr-2" height="30px" width="30px" style={{ borderRadius: "50%", border: "1px solid black" }} onError={i =>  (i.target.src = `${DefautProfile}`)} />
                                         </Link>
                                             <div>

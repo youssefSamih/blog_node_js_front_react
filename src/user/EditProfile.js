@@ -3,6 +3,7 @@ import { read, update, updateUser } from './apiUser'
 import { isAuthenticated } from '../auth';
 import { Redirect } from 'react-router-dom'
 import DefautProfile from '../images/avatar.gif'
+require('dotenv').config()
 
 class EditProfile extends Component {
     constructor(){
@@ -117,7 +118,7 @@ class EditProfile extends Component {
         if(redirectToProfile) {
             return <Redirect to={`/user/${id}`}/>
         }
-        const photoUrl = id ? `http://localhost:8080/user/photo/${id}?${new Date().getTime()}` : DefautProfile
+        const photoUrl = id ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` : DefautProfile
         
         return (
             <div className="container">

@@ -4,6 +4,7 @@ import DefautPost from '../images/defaultimgblog.jpg'
 import {Link, Redirect} from 'react-router-dom'
 import { isAuthenticated } from '../auth';
 import Comment from './Comment';
+require('dotenv').config()
 
 export default class SinglePost extends Component {
     state = {
@@ -84,7 +85,7 @@ export default class SinglePost extends Component {
         const { like, likes } = this.state
         return (
                 <div className="card-body">
-                    <img style={{height: '300px', width: "100%", objectFit: "cover"}} src={`http://localhost:8080/post/photo/${post._id}`} alt={post.name} onError={i => (i.target.src = `${DefautPost}`)} className="img-thumbnail mb-3" />
+                    <img style={{height: '300px', width: "100%", objectFit: "cover"}} src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`} alt={post.name} onError={i => (i.target.src = `${DefautPost}`)} className="img-thumbnail mb-3" />
 
                     {like ? (
                         <h3 onClick={this.likeToggle}><i className="fa fa-thumbs-up text-success bg-dark" style={{padding: '10px', borderRadius: "50%"}}></i> {likes} like</h3>

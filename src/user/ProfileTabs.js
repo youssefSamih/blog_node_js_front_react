@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import DefautProfile from '../images/avatar.gif'
+require('dotenv').config()
 
 export default class ProfileTabs extends Component {
     render() {
@@ -16,7 +17,7 @@ export default class ProfileTabs extends Component {
                                     <div>
                                         <Link to={`/user/${person._id}`}>
                                             <img src=
-                                            {`localhost:8080/user/photo.${person._id}`} alt={person.name} 
+                                            {`${process.env.REACT_APP_API_URL}/user/photo.${person._id}`} alt={person.name} 
                                             className="float-left mr-2" height="30px" width="30px" style={{ borderRadius: "50%", border: "1px solid black" }} onError={i =>  (i.target.src = `${DefautProfile}`)} />
                                             <div>
                                                 <p className="lead"> {person.name} </p>

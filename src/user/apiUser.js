@@ -1,5 +1,6 @@
+require('dotenv').config()
 export const read = (userId, token) => {
-    return fetch(`http://localhost:8080/user/${userId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
         method: "GET",
         headers: {
             Accept: "application/json",
@@ -13,7 +14,7 @@ export const read = (userId, token) => {
 }
 
 export const list = () => {
-    return fetch(`http://localhost:8080/users`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/users`, {
         method: "GET"
     })
     .then(response => {
@@ -23,7 +24,7 @@ export const list = () => {
 }
 
 export const remove = (userId, token) => {
-    return fetch(`http://localhost:8080/user/${userId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
         method: "delete",
         headers: {
             Accept: "application/json",
@@ -37,7 +38,7 @@ export const remove = (userId, token) => {
 }
 
 export const update = (userId, token, user) => {
-    return fetch(`http://localhost:8080/user/${userId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/${userId}`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -62,7 +63,7 @@ export const updateUser = (user, next) => {
 }
 
 export const follow = (userId, token, followId) => {
-    return fetch(`http://localhost:8080/user/follow`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/follow`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -77,7 +78,7 @@ export const follow = (userId, token, followId) => {
 }
 
 export const unfollow = (userId, token, unfollowId) => {
-    return fetch(`http://localhost:8080/user/unfollow`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/unfollow`, {
         method: "PUT",
         headers: {
             Accept: "application/json",
@@ -92,7 +93,7 @@ export const unfollow = (userId, token, unfollowId) => {
 }
 
 export const findPeople = (userId, token) => {
-    return fetch(`http://localhost:8080/user/findpeople/${userId}`, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/findpeople/${userId}`, {
         method: "GET",
         headers: {
             Accept: "application/json",

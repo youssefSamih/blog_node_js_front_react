@@ -7,6 +7,7 @@ import DeleteUser from './DeleteUser';
 import FollowProfileButton from './FollowProfileButton'
 import ProfileTabs from './ProfileTabs';
 import { listByUser } from '../post/apiPost';
+require('dotenv').config()
 
 class Profile extends Component {
     constructor() {
@@ -78,7 +79,7 @@ class Profile extends Component {
 
     render() {
         const {redirectToSignin, user, posts} = this.state
-        const photoUrl = user._id ? `http://localhost:8080/user/photo/${user._id}?${new Date().getTime()}` : DefautProfile
+        const photoUrl = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : DefautProfile
         if (redirectToSignin) return <Redirect to="/signin" />
         return (
             <div className="container">

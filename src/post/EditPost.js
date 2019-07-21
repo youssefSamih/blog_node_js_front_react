@@ -3,6 +3,7 @@ import { singlePost, update } from './apiPost';
 import { isAuthenticated } from '../auth';
 import { Redirect } from 'react-router-dom'
 import DefautPost from '../images/defaultimgblog.jpg'
+require('dotenv').config()
 
 export default class EditPost extends Component {
     constructor() {
@@ -105,7 +106,7 @@ export default class EditPost extends Component {
 
                 {loading ? <div className="jumbotron text-center"><h2>Loading...</h2></div> : ""}
 
-                <img style={{height: '200px', width: "auto"}} src={`http://localhost:8080/post/photo/${id}?${new Date().getTime()}`} onError={i => (i.target.src = `${DefautPost}`)} alt={title} className="img-thumbnail" />
+                <img style={{height: '200px', width: "auto"}} src={`${process.env.REACT_APP_API_URL}/post/photo/${id}?${new Date().getTime()}`} onError={i => (i.target.src = `${DefautPost}`)} alt={title} className="img-thumbnail" />
                 
                 {this.editPostForm(title, body)}
             </div>

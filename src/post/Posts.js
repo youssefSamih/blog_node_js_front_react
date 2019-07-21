@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { list } from './apiPost'
 import DefautPost from '../images/defaultimgblog.jpg'
 import {Link} from 'react-router-dom'
+require('dotenv').config()
 
 class Posts extends Component {
     constructor() {
@@ -31,7 +32,7 @@ class Posts extends Component {
                     return (
                         <div className="card col-md-4" key={i}>
                             <div className="card-body">
-                            <img style={{height: '200px', width: "auto"}} src={`http://localhost:8080/post/photo/${post._id}`} alt={post.name} onError={i => (i.target.src = `${DefautPost}`)} className="img-thumbnail mb-3" />
+                            <img style={{height: '200px', width: "auto"}} src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`} alt={post.name} onError={i => (i.target.src = `${DefautPost}`)} className="img-thumbnail mb-3" />
                             <h5 className="card-title">{post.title}</h5>
                             <p className="card-text">{post.body.substring(0, 100)}</p>
                             <br/>

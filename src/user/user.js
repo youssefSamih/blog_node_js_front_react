@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { list } from './apiUser'
 import DefautProfile from '../images/avatar.gif'
 import {Link} from 'react-router-dom'
+require('dotenv').config()
 
 class Users extends Component {
     constructor() {
@@ -25,7 +26,7 @@ class Users extends Component {
         <div className="row">
             {users.map((user, i) => (
                     <div className="card col-md-4" key={i}>
-                        <img style={{height: '200px', width: "auto"}} src={`http://localhost:8080/user/photo/${user._id}`} alt={user.name} onError={i => (i.target.src = `${DefautProfile}`)} className="img-thumbnail" />
+                        <img style={{height: '200px', width: "auto"}} src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} alt={user.name} onError={i => (i.target.src = `${DefautProfile}`)} className="img-thumbnail" />
                         <div className="card-body">
                         <h5 className="card-title">{user.name}</h5>
                         <p className="card-text">{user.email}</p>
