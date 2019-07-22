@@ -10,6 +10,16 @@ const isActive = (history, path) => {
 const Menu = ({history}) => (
     <div>
         <ul className="nav nav-tabs bg-primary">
+            {isAuthenticated() && isAuthenticated().user.role === 'admin' && (
+                <li className="nav-item">
+                    <Link 
+                    className="nav-link" 
+                    to={`/admin`} 
+                    style={isActive(history, `/admin`)}>
+                    Admin
+                    </Link>
+                </li>
+            )}
             <li className="nav-item">
                 <Link className="nav-link" style={isActive(history, '/')} to="/">Home</Link>
             </li>

@@ -76,13 +76,20 @@ class EditProfile extends Component {
             const userId = this.props.match.params.userId
             const token = isAuthenticated().token
             update(userId, token, this.userData).then(data => {
-                if (data.error) this.setState({error: data.error})
-                    else 
-                        updateUser(data, () => {
-                            this.setState({
-                                redirectToProfile: true
-                            })
+                if (data.error) {
+                    this.setState({error: data.error})
+                } else if(isAuthenticated().user.role === "admin") {
+                    this.setState({
+                        redirectToProfile: true
+                    })
+                }
+                else {
+                    updateUser(data, () => {
+                        this.setState({
+                            redirectToProfile: true
                         })
+                    })
+                }
             })
         }
     }
